@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Applayout } from "./components/layouts/AppLayout";
 
 import NoMatch from "./pages/NoMatch";
-import Homepage from "./pages/Homepage";
+import Homepage from "./pages/Home-page";
 
 export const router = createBrowserRouter(
   [
