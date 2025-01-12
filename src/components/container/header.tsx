@@ -11,6 +11,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Home, Package, Trophy, Settings, LogOut } from "lucide-react";
+import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 
 interface HeaderProps {
   isLoggedIn?: boolean;
@@ -21,7 +23,30 @@ interface HeaderProps {
   };
 }
 
+const menuItems = [
+  { label: "Home", icon: <Home className="mr-2 h-4 w-4" />, href: "/" },
+  {
+    label: "Inventory",
+    icon: <Package className="mr-2 h-4 w-4" />,
+    href: "/inventory",
+  },
+  {
+    label: "Leaderboard",
+    icon: <Trophy className="mr-2 h-4 w-4" />,
+    href: "/leaderboard",
+  },
+  //   {
+  //     label: "Settings",
+  //     icon: <Settings className="mr-2 h-4 w-4" />,
+  //     href: "/settings",
+  //   },
+];
+
 export function Header({ isLoggedIn, userData }: HeaderProps) {
+  const navigate = useNavigate();
+
+  // ... (previous state declarations remain the same)
+
   const [open, setOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -118,25 +143,35 @@ export function Header({ isLoggedIn, userData }: HeaderProps) {
             </Button>
           </SheetTrigger>
           <SheetContent className="w-[300px] sm:w-[400px]">
-            <SheetHeader>
+            {/* <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
-            </SheetHeader>
+            </SheetHeader> */}
             <div className="py-4">
-              {/* Add your menu items here */}
               <nav className="space-y-2">
-                <Button variant="ghost" className="w-full justify-start">
-                  Dashboard
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  Inventory
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  Leaderboard
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  Settings
-                </Button>
-                {/* Add more menu items as needed */}
+                {menuItems.map((item) => (
+                  <Button
+                    key={item.href}
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      navigate(item.href);
+                      setIsSheetOpen(false);
+                    }}>
+                    {item.icon}
+                    {item.label}
+                  </Button>
+                ))}
+                {/* <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-500 hover:text-red-600"
+                  onClick={() => {
+                    // Add your logout logic here
+                    navigate("/login");
+                    setIsSheetOpen(false);
+                  }}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button> */}
               </nav>
             </div>
           </SheetContent>

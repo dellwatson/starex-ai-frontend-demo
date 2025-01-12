@@ -107,3 +107,8 @@ export default function Homepage() {
     </div>
   );
 }
+
+// craft logic calculations, miss rate etc
+// sending ship for mission,
+
+// can show how much ship on mission durable, % of losing, and destroyed, the % hardship

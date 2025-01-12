@@ -4,6 +4,8 @@ import { Applayout } from "./components/layouts/AppLayout";
 
 import NoMatch from "./pages/NoMatch";
 import Homepage from "./pages/Home-page";
+import LeaderboardPage from "./pages/LBoard-page";
+import InventoryPage from "./pages/Inventory-page";
 
 export const router = createBrowserRouter(
   [
@@ -15,6 +17,16 @@ export const router = createBrowserRouter(
           path: "",
           element: <Homepage />,
         },
+
+        {
+          path: "/leaderboard",
+          element: <LeaderboardPage />,
+        },
+        {
+          path: "/inventory",
+          element: <InventoryPage />,
+        },
+
         // {
         //   path: "profile",
         //   element: <Profile />,
