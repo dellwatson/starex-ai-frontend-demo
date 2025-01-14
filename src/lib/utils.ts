@@ -1,6 +1,15 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+// src/lib/utils.ts
+import { ethers } from "ethers";
+
+export function generateWalletAddress(): string {
+  // Create a random wallet
+  const wallet = ethers.Wallet.createRandom();
+  return wallet.address; // Returns a string like "0x..."
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

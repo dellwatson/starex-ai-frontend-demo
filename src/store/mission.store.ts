@@ -5,6 +5,8 @@ import { Mission, MissionState } from "@/types/mission.interface";
 import { useInventoryStore } from "./inventory-store";
 import { ItemType } from "@/types/items.interface";
 import { mockRewards } from "@/components/_mocks/mockRewards";
+import { useUserStore } from "./user.store";
+import { awsAPI } from "@/api/aws-client";
 
 const isDevelopment = true;
 const generateMissionRewards = (durationInMinutes: number) => {
@@ -55,27 +57,18 @@ export const useMissionStore = create<MissionState>()(
         return diffInMinutes;
       },
 
-      completeMission: (missionId: string) => {
+      completeMission: async (missionId: string) => {
         const mission = get().activeMissions.find((m) => m.id === missionId);
         if (!mission) return;
 
         const duration = get().getMissionDuration(mission.startTime);
         const rewards = generateMissionRewards(duration);
 
-        const inventory = useInventoryStore.getState();
-
-        // Return spaceship
-        inventory.addToInventory({
-          type: ItemType.SPACESHIP,
-          quantity: 1,
-          ...mission.ship,
-        });
-
-        // Add rewards to inventory
-        rewards.forEach((reward) => {
-          inventory.addToInventory(reward);
-        });
-        console.log(rewards, "rewards");
+        // Get user ID from user store
+        const userId = useUserStore.getState().userId;
+        if (!userId) {
+          throw new Error("User not authenticated");
+        }
 
         const completeMission = {
           ...mission,
@@ -85,23 +78,61 @@ export const useMissionStore = create<MissionState>()(
           rewards, // Store rewards in mission history
         };
 
-        set((state) => ({
-          activeMissions: state.activeMissions.filter(
-            (m) => m.id !== missionId
-          ),
-          previousMissions: [completeMission, ...state.previousMissions],
-          //   activeMissions: state.activeMissions.map((m) =>
-          //     m.id === missionId
-          //       ? {
-          //           ...m,
-          //           status: "completed",
-          //           endTime: new Date(),
-          //           duration,
-          //           rewards, // Store rewards in mission history
-          //         }
-          //       : m
-          //   ),
-        }));
+        try {
+          // First update backend
+          const result = await awsAPI.mission.complete({
+            ...mission,
+            missionId,
+            userId, // Include user ID
+            duration,
+            rewards,
+            shipType: mission.ship.type,
+            startTime: mission.startTime,
+            endTime: new Date(),
+            // Add any other mission details needed
+          });
+
+          if (result.success) {
+            // Update inventory store
+            const inventory = useInventoryStore.getState();
+
+            // Return spaceship
+            inventory.addToInventory({
+              type: ItemType.SPACESHIP,
+              quantity: 1,
+              ...mission.ship,
+            });
+
+            // Add rewards to inventory
+            rewards.forEach((reward) => {
+              inventory.addToInventory(reward);
+            });
+
+            // Update mission store state
+            set((state) => ({
+              activeMissions: state.activeMissions.filter(
+                (m) => m.id !== missionId
+              ),
+              previousMissions: [
+                {
+                  ...mission,
+                  status: "completed",
+                  endTime: new Date(),
+                  duration,
+                  rewards,
+                  userId, // Include user ID in mission history
+                },
+                ...state.previousMissions,
+              ],
+            }));
+
+            return rewards;
+          }
+        } catch (error) {
+          console.error("Failed to complete mission:", error);
+          throw error;
+        }
+
         return rewards;
       },
 

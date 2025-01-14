@@ -15,6 +15,7 @@ import GraphZone from "@/components/container/graph-zone.node";
 import SystemWidget from "@/components/container/system.node";
 import UserWdiget from "@/components/container/user.node";
 import { ZoneWidget } from "@/components/container/multiplayer.node";
+import DialogFactions from "@/components/dialog/dialog-factions";
 
 // Mock user data
 const userData = {
@@ -26,6 +27,7 @@ const userData = {
 export default function Homepage() {
   return (
     <div className="h-screen w-full flex flex-col">
+      <DialogFactions />
       {/* Header */}
       <div className="">
         <Header isLoggedIn={true} userData={userData} />

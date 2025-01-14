@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { Home, Package, Trophy, Settings, LogOut } from "lucide-react";
 import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
+import { useUserStore } from "@/store/user.store";
 
 interface HeaderProps {
   isLoggedIn?: boolean;
@@ -50,6 +51,7 @@ export function Header({ isLoggedIn, userData }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const { userId, factionId } = useUserStore();
 
   // Command (cmd+K) handler
   useEffect(() => {
@@ -97,7 +99,9 @@ export function Header({ isLoggedIn, userData }: HeaderProps) {
                 <AvatarFallback>{userData.name[0]}</AvatarFallback>
               </Avatar>
               <div className="hidden md:block">
-                <p className="text-sm font-medium">{userData.name}</p>
+                <span>
+                  {userId?.slice(0, 6)}...{userId?.slice(-4)}
+                </span>
                 <p className="text-xs text-muted-foreground">
                   {userData.gold} Gold
                 </p>
