@@ -4,7 +4,7 @@ import {
   CraftingRecipe,
   ItemType,
   ItemRarity,
-} from "@/types/inventory.ts";
+} from "@/types/inventory.type";
 
 // Helper function to generate price history
 const generatePriceHistory = (basePrice: number) => {

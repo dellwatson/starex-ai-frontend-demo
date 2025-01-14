@@ -3,7 +3,9 @@ import "./style.css";
 
 interface WrapperDialogProps {
   isOpen?: boolean;
+  canQuit?: boolean;
   onOpenChange?: (open: boolean) => void;
+  onClose?: (open: boolean) => void;
   trigger?: React.ReactNode;
   children?: React.ReactNode;
   title?: string;
@@ -14,6 +16,8 @@ interface WrapperDialogProps {
 function WrapperDialog({
   isOpen,
   onOpenChange,
+  onClose,
+  canQuit = true,
   trigger,
   children,
   title = "Dialog Title",
@@ -39,11 +43,16 @@ function WrapperDialog({
 
           {footer && <div className="button-container">{footer}</div>}
 
-          <Dialog.Close asChild>
-            <button className="close-button" aria-label="Close">
-              ×
-            </button>
-          </Dialog.Close>
+          {canQuit && (
+            <Dialog.Close asChild>
+              <button
+                onClick={onClose}
+                className="close-button"
+                aria-label="Close">
+                ×
+              </button>
+            </Dialog.Close>
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

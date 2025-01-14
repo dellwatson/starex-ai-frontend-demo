@@ -11,6 +11,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Header } from "@/components/container/header";
+import GraphZone from "@/components/container/graph-zone.node";
+import SystemWidget from "@/components/container/system.node";
+import UserWdiget from "@/components/container/user.node";
+import { ZoneWidget } from "@/components/container/multiplayer.node";
 
 // Mock user data
 const userData = {
@@ -38,19 +42,19 @@ export default function Homepage() {
                 <ResizablePanelGroup direction="horizontal">
                   <ResizablePanel defaultSize={25}>
                     <div className="h-full bg-sage-600  p-4">
-                      left: for system section
+                      <SystemWidget />
                     </div>
                   </ResizablePanel>
                   <ResizableHandle withHandle />
                   <ResizablePanel defaultSize={50}>
                     <div className="h-full bg-olive-500 p-4">
-                      middle: for main 3d canvas section
+                      <GraphZone />
                     </div>
                   </ResizablePanel>
                   <ResizableHandle withHandle />
                   <ResizablePanel defaultSize={25}>
                     <div className="h-full bg-sage-600  p-4">
-                      right: for user section
+                      <UserWdiget />
                     </div>
                   </ResizablePanel>
                 </ResizablePanelGroup>
@@ -66,17 +70,17 @@ export default function Homepage() {
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="bg-gray-100 p-4 data-[state=open]:h-[calc(100dvh-8rem)] overflow-auto">
-                        left: for system section
+                        <SystemWidget />
                       </div>
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="middle-panel">
                     <AccordionTrigger className="bg-green-500 px-4">
-                      Main Canvas
+                      Graph Zone
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="bg-green-500 p-4 data-[state=open]:h-[calc(100dvh-8rem)] overflow-auto">
-                        middle: for main 3d canvas section
+                        <GraphZone />
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -86,7 +90,7 @@ export default function Homepage() {
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="bg-sage-600  p-4 data-[state=open]:h-[calc(100dvh-8rem)] overflow-auto">
-                        right: for user section
+                        <UserWdiget />
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -98,9 +102,7 @@ export default function Homepage() {
           {/* Footer */}
           <ResizableHandle withHandle className="hidden md:flex" />
           <ResizablePanel defaultSize={25} className="hidden md:block">
-            <div className="bg-orange-500 p-4 h-full">
-              footer for multiplayer or logs section
-            </div>
+            <ZoneWidget />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
